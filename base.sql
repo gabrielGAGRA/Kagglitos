@@ -1,8 +1,7 @@
 SELECT 
-    o.delivery_time_model - o.delivery_time AS deviationDays,
+    o.delivery_time_model - o.delivery_time AS ModelErrorDays,
     o.delivery_time,
     o.delivery_time_model,
-    oi.price,
     oi.freight_value,
     p.product_weight_g,
     p.product_length_cm * p.product_height_cm * p.product_width_cm AS volume,
@@ -13,8 +12,8 @@ SELECT
     s.seller_zip_code_prefix,
     s.seller_state,
     s.seller_city,
-    op.payment_type,
     date_diff('second', o.order_delivered_carrier_date, o.order_delivered_customer_date) / (24 * 60 * 60.0) AS Days_Delivery_CarrierToCustomer
+    o.order_id
 FROM
     orders o
 JOIN 
@@ -25,5 +24,3 @@ JOIN
     customers c ON o.customer_id = c.customer_id
 JOIN 
     sellers s ON oi.seller_id = s.seller_id
-JOIN 
-    order_payments op ON o.order_id = op.order_id;
